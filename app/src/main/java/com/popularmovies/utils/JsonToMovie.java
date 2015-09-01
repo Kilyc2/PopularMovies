@@ -30,7 +30,7 @@ public class JsonToMovie {
             String releaseDate = jsonMovie.getString(RELEASE_DATE);
             String duration = jsonMovie.getString(DURATION);
             Float rating = Float.valueOf(rate);
-            return new Movie(id, poster, title, releaseDate, rating, synopsis, duration);
+            return new Movie(id, poster, title, releaseDate, rating, synopsis, duration, false);
         } catch (JSONException jsonE) {
             return new Movie();
         }

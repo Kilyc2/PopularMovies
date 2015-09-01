@@ -7,13 +7,14 @@ import com.popularmovies.utils.Numeric;
 
 public class Movie implements Parcelable {
 
-    public String id;
-    public String poster;
-    public String title;
-    public String date;
-    public float rate;
-    public String synopsis;
-    public String duration;
+    private String id;
+    private String poster;
+    private String title;
+    private String date;
+    private float rate;
+    private String synopsis;
+    private String duration;
+    private boolean isFavorite;
 
     public Movie() {
         this.id = "";
@@ -23,10 +24,11 @@ public class Movie implements Parcelable {
         this.rate = 0f;
         this.synopsis = "";
         this.duration = "0";
+        this.isFavorite = false;
     }
 
     public Movie(String id, String poster, String title, String date, float rate, String synopsis,
-                 String duration) {
+                 String duration, boolean isFavorite) {
         this.id = id;
         this.poster = poster;
         this.title = title;
@@ -34,6 +36,7 @@ public class Movie implements Parcelable {
         this.rate = rate;
         this.synopsis = synopsis.equals("null") ? "" : synopsis;
         this.duration = Numeric.isNumeric(duration) ? duration : "0";
+        this.isFavorite = isFavorite;
     }
 
     public Movie(String id, String poster, String title, float rate) {
@@ -83,6 +86,14 @@ public class Movie implements Parcelable {
         return duration + " min";
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void markAsFavorite() {
+        isFavorite = true;
+    }
+
     public Movie(Parcel in) {
         this.id = in.readString();
         this.poster = in.readString();
@@ -91,6 +102,7 @@ public class Movie implements Parcelable {
         this.rate = in.readFloat();
         this.synopsis = in.readString();
         this.duration = in.readString();
+        this.isFavorite = in.readInt() == 1;
     }
 
     @Override
@@ -102,6 +114,7 @@ public class Movie implements Parcelable {
         out.writeFloat(this.rate);
         out.writeString(this.synopsis);
         out.writeString(this.duration);
+        out.writeInt(this.isFavorite ? 1 : 0);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
