@@ -41,8 +41,6 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        progressBarMovie.setProgress(0);
-        progressBarMovie.setVisibility(View.VISIBLE);
         if(savedInstanceState == null || !savedInstanceState.containsKey(KEY_STATE_MOVIE)) {
             FetchMovieDetailsTask movieDetailsTask = new FetchMovieDetailsTask();
             String idMovie = getArguments().getString(Constants.ID_MOVIE);
@@ -51,7 +49,6 @@ public class MovieDetailsFragment extends Fragment {
             movieDetails = savedInstanceState.getParcelable(KEY_STATE_MOVIE);
             setMovieView();
         }
-        progressBarMovie.setVisibility(View.GONE);
     }
 
     private void setMovieView() {
@@ -81,6 +78,12 @@ public class MovieDetailsFragment extends Fragment {
     public class FetchMovieDetailsTask extends AsyncTask<String, Void, Movie> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBarMovie.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected Movie doInBackground(String... params) {
             final String MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/" + params[0];
             final String API_KEY_PARAM = "api_key";
@@ -95,6 +98,7 @@ public class MovieDetailsFragment extends Fragment {
         protected void onPostExecute(Movie movie) {
             movieDetails = movie;
             setMovieView();
+            progressBarMovie.setVisibility(View.GONE);
         }
     }
 }

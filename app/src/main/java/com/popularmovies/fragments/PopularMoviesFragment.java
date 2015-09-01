@@ -68,7 +68,6 @@ public class PopularMoviesFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        progressBarMovies.setVisibility(View.VISIBLE);
         if(savedInstanceState == null || !savedInstanceState.containsKey(KEY_STATE_MOVIES)) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String sortOrder = sharedPref.getString(Constants.KEY_PREF_SORT_ORDER, "");
@@ -81,13 +80,11 @@ public class PopularMoviesFragment extends Fragment {
             popularMovies = savedInstanceState.getParcelableArrayList(KEY_STATE_MOVIES);
             setPosterAdapter();
         }
-        progressBarMovies.setVisibility(View.GONE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        progressBarMovies.setVisibility(View.VISIBLE);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (sharedPref.getBoolean(Constants.KEY_PREF_ORDER_CHANGED, false)) {
             String sortOrder = sharedPref.getString(Constants.KEY_PREF_SORT_ORDER, "");
@@ -97,7 +94,6 @@ public class PopularMoviesFragment extends Fragment {
             editorSharedPref.putBoolean(Constants.KEY_PREF_ORDER_CHANGED, false);
             editorSharedPref.apply();
         }
-        progressBarMovies.setVisibility(View.GONE);
     }
 
     private void setPosterAdapter() {
@@ -129,6 +125,12 @@ public class PopularMoviesFragment extends Fragment {
     public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBarMovies.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected ArrayList<Movie> doInBackground(String... params) {
             final String MOVIES_BASE_URL = "http://api.themoviedb.org/3/discover/movie";
             final String SORT_BY_PARAM = "sort_by";
@@ -145,7 +147,7 @@ public class PopularMoviesFragment extends Fragment {
         protected void onPostExecute(ArrayList<Movie> movies) {
             popularMovies = movies;
             setPosterAdapter();
-
+            progressBarMovies.setVisibility(View.GONE);
         }
     }
 }
