@@ -1,13 +1,23 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="title_movie_size">40sp</dimen>
-    <dimen name="date_movie_size">20sp</dimen>
-    <dimen name="duration_movie_size">20sp</dimen>
     <dimen name="rating_movie_padding">10dp</dimen>
     <dimen name="data_movie_margin">2dp</dimen>
     <dimen name="synopsis_movie_margin_top">10dp</dimen>
     <dimen name="title_movie_margin_bottom">10dp</dimen>
     <dimen name="poster_bottom_padding">5dp</dimen>
+    <dimen name="poster_detail_right_padding">10dp</dimen>
+    <dimen name="separator">1dp</dimen>
+    <dimen name="trailer_padding">10dp</dimen>
+    <dimen name="review_padding">10dp</dimen>
+    <dimen name="drawable_padding">4dp</dimen>
+    <dimen name="trailer_height">48dp</dimen>
+    <dimen name="review_height">48dp</dimen>
 
+    <dimen name="title_movie_size">34sp</dimen>
+    <dimen name="date_movie_size">20sp</dimen>
+    <dimen name="duration_movie_size">20sp</dimen>
+    <dimen name="sections_detail_font_size">20sp</dimen>
+    <dimen name="trailer_name_font_size">16sp</dimen>
+    <dimen name="review_author_font_size">16sp</dimen>
 </resources>

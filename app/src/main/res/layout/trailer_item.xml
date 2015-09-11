@@ -1,0 +1,25 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/trailer_height"
+        android:id="@+id/name_trailer"
+        android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
+        android:drawableStart="@drawable/ic_play_arrow_black_24dp"
+        android:drawablePadding="@dimen/drawable_padding"
+        android:textSize="@dimen/trailer_name_font_size"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/trailer_padding"
+        android:paddingTop="@dimen/trailer_padding"/>
+
+    <View android:id="@+id/separator"
+        android:background="@color/separator"
+        android:layout_width = "match_parent"
+        android:layout_height="@dimen/separator" />
+
+</LinearLayout>

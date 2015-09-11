@@ -56,7 +56,7 @@ public class PopularMoviesFragment extends Fragment {
         movie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String idMovie = posterAdapter.getItem(position).getId();
+                long idMovie = posterAdapter.getItem(position).getId();
                 Intent detailMovieIntent = new Intent(getActivity(), MovieDetailsActivity.class);
                 detailMovieIntent.putExtra(Constants.ID_MOVIE, idMovie);
                 startActivity(detailMovieIntent);

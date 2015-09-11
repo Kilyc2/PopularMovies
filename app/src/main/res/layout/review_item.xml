@@ -1,0 +1,30 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/trailer_height"
+        android:id="@+id/review_author"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/ic_expand_more_black_24dp"
+        android:drawableStart="@drawable/ic_expand_more_black_24dp"
+        android:drawablePadding="@dimen/drawable_padding"
+        android:textSize="@dimen/review_author_font_size" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/review_text"
+        android:paddingBottom="@dimen/review_padding"
+        android:lineSpacingMultiplier="1.2"/>
+
+    <View android:id="@+id/separator"
+        android:background="@color/separator"
+        android:layout_width = "match_parent"
+        android:layout_height="@dimen/separator" />
+
+</LinearLayout>
