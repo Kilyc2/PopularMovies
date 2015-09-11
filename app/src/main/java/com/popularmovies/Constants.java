@@ -4,7 +4,7 @@ import android.net.Uri;
 
 public class Constants {
 
-    public final static String API_KEY = "8a45c0fa2c2e4b8db3ea6067cfac8928";
+    public final static String API_KEY = "xxx";
     public final static String ID_MOVIE = "ID";
     public final static String KEY_PREF_SORT_ORDER = "pref_sort_movies_list";
     public final static String KEY_PREF_ORDER_CHANGED = "pref_order_changed";
