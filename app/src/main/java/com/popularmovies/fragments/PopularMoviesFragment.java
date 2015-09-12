@@ -1,12 +1,15 @@
 package com.popularmovies.fragments;
 
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +25,9 @@ import com.popularmovies.R;
 import com.popularmovies.activities.MovieDetailsActivity;
 import com.popularmovies.activities.SettingsActivity;
 import com.popularmovies.adapters.PosterAdapter;
+import com.popularmovies.data.tables.MoviesTable;
 import com.popularmovies.entities.Movie;
+import com.popularmovies.utils.CursorUtil;
 import com.popularmovies.utils.JsonManagerData;
 import com.popularmovies.utils.JsonToMovie;
 
@@ -71,8 +76,13 @@ public class PopularMoviesFragment extends Fragment {
         if(savedInstanceState == null || !savedInstanceState.containsKey(KEY_STATE_MOVIES)) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String sortOrder = sharedPref.getString(Constants.KEY_PREF_SORT_ORDER, "");
-            FetchMoviesTask moviesTask = new FetchMoviesTask();
-            moviesTask.execute(sortOrder);
+            if (isSortOrderByFavorites(sortOrder)) {
+                FetchFavoritesMoviesTask favoritesMoviesTask = new FetchFavoritesMoviesTask();
+                favoritesMoviesTask.execute();
+            } else {
+                FetchMoviesTask moviesTask = new FetchMoviesTask();
+                moviesTask.execute(sortOrder);
+            }
             SharedPreferences.Editor editorSharedPref = sharedPref.edit();
             editorSharedPref.putBoolean(Constants.KEY_PREF_ORDER_CHANGED, false);
             editorSharedPref.apply();
@@ -82,19 +92,28 @@ public class PopularMoviesFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (sharedPref.getBoolean(Constants.KEY_PREF_ORDER_CHANGED, false)) {
-            String sortOrder = sharedPref.getString(Constants.KEY_PREF_SORT_ORDER, "");
-            FetchMoviesTask moviesTask = new FetchMoviesTask();
-            moviesTask.execute(sortOrder);
-            SharedPreferences.Editor editorSharedPref = sharedPref.edit();
-            editorSharedPref.putBoolean(Constants.KEY_PREF_ORDER_CHANGED, false);
-            editorSharedPref.apply();
-        }
+    private boolean isSortOrderByFavorites(String sortOrder){
+        return TextUtils.equals(sortOrder, getString(R.string.pref_sort_title_favorites));
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        if (sharedPref.getBoolean(Constants.KEY_PREF_ORDER_CHANGED, false)) {
+//            String sortOrder = sharedPref.getString(Constants.KEY_PREF_SORT_ORDER, "");
+//            if (isSortOrderByFavorites(sortOrder)) {
+//                FetchFavoritesMoviesTask favoritesMoviesTask = new FetchFavoritesMoviesTask();
+//                favoritesMoviesTask.execute();
+//            } else {
+//                FetchMoviesTask moviesTask = new FetchMoviesTask();
+//                moviesTask.execute(sortOrder);
+//            }
+//            SharedPreferences.Editor editorSharedPref = sharedPref.edit();
+//            editorSharedPref.putBoolean(Constants.KEY_PREF_ORDER_CHANGED, false);
+//            editorSharedPref.apply();
+//        }
+//    }
 
     private void setPosterAdapter() {
         posterAdapter.clear();
@@ -150,4 +169,41 @@ public class PopularMoviesFragment extends Fragment {
             progressBarMovies.setVisibility(View.GONE);
         }
     }
+
+
+    public class FetchFavoritesMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBarMovies.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected ArrayList<Movie> doInBackground(Void... params) {
+            ContentResolver contentResolver = getActivity().getContentResolver();
+            Cursor cursor = contentResolver.query(MoviesTable.CONTENT_URI,
+                    null, null, null, null);
+            ArrayList<Movie> favoritesMovies = new ArrayList<Movie>();
+            if(CursorUtil.isValidCursor(cursor)) {
+                do {
+                    long id = cursor.getLong(cursor.getColumnIndex(MoviesTable._ID));
+                    String poster = cursor.getString(
+                            cursor.getColumnIndex(MoviesTable.COLUMN_POSTER));
+                    Movie movie = new Movie(id, poster);
+                    favoritesMovies.add(movie);
+                } while (cursor.moveToNext());
+            }
+            CursorUtil.closeCursor(cursor);
+            return favoritesMovies;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Movie> movies) {
+            popularMovies = movies;
+            setPosterAdapter();
+            progressBarMovies.setVisibility(View.GONE);
+        }
+    }
+
 }

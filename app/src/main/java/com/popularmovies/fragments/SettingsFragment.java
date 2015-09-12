@@ -5,7 +5,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
-import com.popularmovies.Constants;
 import com.popularmovies.R;
 
 public class SettingsFragment extends PreferenceFragment
@@ -19,11 +18,11 @@ public class SettingsFragment extends PreferenceFragment
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(Constants.KEY_PREF_SORT_ORDER)) {
-            SharedPreferences.Editor editorSharedPref = sharedPreferences.edit();
-            editorSharedPref.putBoolean(Constants.KEY_PREF_ORDER_CHANGED, true);
-            editorSharedPref.apply();
-        }
+//        if (key.equals(Constants.KEY_PREF_SORT_ORDER)) {
+//            SharedPreferences.Editor editorSharedPref = sharedPreferences.edit();
+//            editorSharedPref.putBoolean(Constants.KEY_PREF_ORDER_CHANGED, true);
+//            editorSharedPref.apply();
+//        }
     }
 
     @Override

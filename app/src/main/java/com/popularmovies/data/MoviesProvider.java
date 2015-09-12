@@ -25,6 +25,14 @@ public class MoviesProvider extends ContentProvider {
     public static final int REVIEW = 300;
     public static final int REVIEW_MOVIE_ID = 301;
 
+    private Cursor getFavoritesMovie(Uri uri) {
+        SQLiteQueryBuilder favoriteMovieQueryBuilder = new SQLiteQueryBuilder();
+        favoriteMovieQueryBuilder.setTables(MoviesTable.TABLE_NAME);
+
+        return favoriteMovieQueryBuilder.query(mOpenHelper.getReadableDatabase(), null,
+                null, null, null, null, null);
+    }
+
     private Cursor getFavoriteMovie(Uri uri) {
         SQLiteQueryBuilder favoriteMovieQueryBuilder = new SQLiteQueryBuilder();
         favoriteMovieQueryBuilder.setTables(MoviesTable.TABLE_NAME);
@@ -96,6 +104,10 @@ public class MoviesProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         Cursor returnCursor;
         switch (sUriMatcher.match(uri)) {
+            case MOVIE: {
+                returnCursor = getFavoritesMovie(uri);
+                break;
+            }
             case MOVIE_ID: {
                 returnCursor = getFavoriteMovie(uri);
                 break;
