@@ -14,7 +14,7 @@ public class PopularMoviesActivity extends Activity {
         setContentView(R.layout.activity_popular_movies);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PopularMoviesFragment())
+                    .add(R.id.popularmovies_container, new PopularMoviesFragment())
                     .commit();
         }
     }

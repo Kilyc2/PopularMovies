@@ -16,7 +16,7 @@ public class MovieDetailsActivity extends Activity {
             MovieDetailsFragment movieDetails = new MovieDetailsFragment();
             movieDetails.setArguments(getIntent().getExtras());
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, movieDetails)
+                    .add(R.id.movie_details_container, movieDetails)
                     .commit();
         }
     }
