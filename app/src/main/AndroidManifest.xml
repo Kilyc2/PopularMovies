@@ -40,18 +40,6 @@
             android:authorities="com.popularmovies.data" >
         </provider>
 
-        <activity
-            android:name=".activities.PopularMovieListActivity"
-            android:label="@string/title_popularmovie_list" >
-        </activity>
-        <activity
-            android:name=".activities.PopularMovieDetailActivity"
-            android:label="@string/title_popularmovie_detail"
-            android:parentActivityName=".activities.PopularMovieListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.popularmovies.PopularMovieListActivity" />
-        </activity>
     </application>
 
 </manifest>
