@@ -40,6 +40,7 @@
             android:authorities="com.popularmovies.data" >
         </provider>
 
+
     </application>
 
 </manifest>

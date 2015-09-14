@@ -30,5 +30,7 @@
     <string name="pref_sort_value_favorites">favorites</string>
     <string name="title_popularmovie_list">Popular Movies</string>
     <string name="title_popularmovie_detail">Popular Movie Detail</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
 
 </resources>

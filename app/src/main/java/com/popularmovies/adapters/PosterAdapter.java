@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.popularmovies.R;
+import com.popularmovies.activities.PopularMoviesActivity;
 import com.popularmovies.entities.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +29,11 @@ public class PosterAdapter extends ArrayAdapter<Movie> {
         Movie movie = getItem(position);
         ImageView poster = (ImageView)convertView.findViewById(R.id.poster_item_movie);
         poster.setTag(movie.getId());
-        Picasso.with(getContext()).load(movie.getPosterW342()).into(poster);
+        if (((PopularMoviesActivity) getContext()).isDualPane()) {
+            Picasso.with(getContext()).load(movie.getPosterW185()).into(poster);
+        } else {
+            Picasso.with(getContext()).load(movie.getPosterW342()).into(poster);
+        }
         return poster;
     }
 }

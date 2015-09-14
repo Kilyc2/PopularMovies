@@ -1,5 +1,6 @@
 package com.popularmovies.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -22,7 +23,6 @@ import android.widget.ProgressBar;
 
 import com.popularmovies.Constants;
 import com.popularmovies.R;
-import com.popularmovies.activities.MovieDetailsActivity;
 import com.popularmovies.activities.SettingsActivity;
 import com.popularmovies.adapters.PosterAdapter;
 import com.popularmovies.data.tables.MoviesTable;
@@ -40,9 +40,20 @@ public class PopularMoviesFragment extends Fragment {
     private PosterAdapter posterAdapter;
     private ArrayList<Movie> popularMovies;
     private ProgressBar progressBarMovies;
+    private Callbacks mCallbacks = movieCallbacks;
 
     public PopularMoviesFragment() {
     }
+
+    public interface Callbacks {
+        public void onItemSelected(long id);
+    }
+
+    private static Callbacks movieCallbacks = new Callbacks() {
+        @Override
+        public void onItemSelected(long id) {
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,13 +72,25 @@ public class PopularMoviesFragment extends Fragment {
         movie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                long idMovie = posterAdapter.getItem(position).getId();
-                Intent detailMovieIntent = new Intent(getActivity(), MovieDetailsActivity.class);
-                detailMovieIntent.putExtra(Constants.ID_MOVIE, idMovie);
-                startActivity(detailMovieIntent);
+                mCallbacks.onItemSelected(posterAdapter.getItem(position).getId());
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (!(activity instanceof Callbacks)) {
+            throw new IllegalStateException("Activity must implement fragment's callbacks.");
+        }
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = movieCallbacks;
     }
 
     @Override
@@ -83,9 +106,6 @@ public class PopularMoviesFragment extends Fragment {
                 FetchMoviesTask moviesTask = new FetchMoviesTask();
                 moviesTask.execute(sortOrder);
             }
-            SharedPreferences.Editor editorSharedPref = sharedPref.edit();
-            editorSharedPref.putBoolean(Constants.KEY_PREF_ORDER_CHANGED, false);
-            editorSharedPref.apply();
         } else {
             popularMovies = savedInstanceState.getParcelableArrayList(KEY_STATE_MOVIES);
             setPosterAdapter();
@@ -96,25 +116,6 @@ public class PopularMoviesFragment extends Fragment {
         return TextUtils.equals(sortOrder, getString(R.string.pref_sort_title_favorites));
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        if (sharedPref.getBoolean(Constants.KEY_PREF_ORDER_CHANGED, false)) {
-//            String sortOrder = sharedPref.getString(Constants.KEY_PREF_SORT_ORDER, "");
-//            if (isSortOrderByFavorites(sortOrder)) {
-//                FetchFavoritesMoviesTask favoritesMoviesTask = new FetchFavoritesMoviesTask();
-//                favoritesMoviesTask.execute();
-//            } else {
-//                FetchMoviesTask moviesTask = new FetchMoviesTask();
-//                moviesTask.execute(sortOrder);
-//            }
-//            SharedPreferences.Editor editorSharedPref = sharedPref.edit();
-//            editorSharedPref.putBoolean(Constants.KEY_PREF_ORDER_CHANGED, false);
-//            editorSharedPref.apply();
-//        }
-//    }
-
     private void setPosterAdapter() {
         posterAdapter.clear();
         posterAdapter.addAll(popularMovies);
@@ -122,8 +123,8 @@ public class PopularMoviesFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(KEY_STATE_MOVIES, popularMovies);
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_STATE_MOVIES, popularMovies);
     }
 
     @Override
@@ -170,7 +171,6 @@ public class PopularMoviesFragment extends Fragment {
         }
     }
 
-
     public class FetchFavoritesMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
 
         @Override
@@ -205,5 +205,4 @@ public class PopularMoviesFragment extends Fragment {
             progressBarMovies.setVisibility(View.GONE);
         }
     }
-
 }

@@ -3,4 +3,5 @@
     <color name="separator">#c0c0c0</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+    <color name="blue">#00aceb</color>
 </resources>

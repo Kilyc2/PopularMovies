@@ -43,9 +43,6 @@ public class MovieDetailsFragment extends Fragment {
     private ProgressBar progressBarMovie;
     private ContentResolver contentResolver;
 
-    public MovieDetailsFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,8 +57,10 @@ public class MovieDetailsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if(savedInstanceState == null || !savedInstanceState.containsKey(KEY_STATE_MOVIE)) {
             FetchFavoriteMovieTask favoriteMovieDetailsTask = new FetchFavoriteMovieTask();
-            long idMovie = getArguments().getLong(Constants.ID_MOVIE);
-            favoriteMovieDetailsTask.execute(idMovie);
+            if (getArguments() != null) {
+                long idMovie = getArguments().getLong(Constants.ID_MOVIE);
+                favoriteMovieDetailsTask.execute(idMovie);
+            }
         } else {
             movieDetails = savedInstanceState.getParcelable(KEY_STATE_MOVIE);
             setMovieView();

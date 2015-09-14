@@ -1,7 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/popularmovies_container"
+    android:name="com.popularmovies.fragments.PopularMoviesFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PosterMovies"
+    tools:context="com.popularmovies.activities.PopularMoviesActivity"
     tools:ignore="MergeRootFrame" />
