@@ -16,4 +16,14 @@ public class YoutubeUtil {
                 .build();
         context.startActivity(new Intent(Intent.ACTION_VIEW, uriYoutube));
     }
+
+    public static void shareVideo(Context context, String keyVideo) {
+        Uri uriYoutube = Uri.parse(YOUTUBE_BASE_URL).buildUpon()
+                .appendQueryParameter(KEY_PARAM, keyVideo)
+                .build();
+        Intent shareIntent = new Intent(Intent.ACTION_SEND, uriYoutube);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, uriYoutube.toString());
+        context.startActivity(Intent.createChooser(shareIntent, "Share trailer"));
+    }
 }

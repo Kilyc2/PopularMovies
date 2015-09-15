@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -42,6 +45,13 @@ public class MovieDetailsFragment extends Fragment {
     private Movie movieDetails;
     private ProgressBar progressBarMovie;
     private ContentResolver contentResolver;
+    private MenuItem shareTrailerItem;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,6 +119,7 @@ public class MovieDetailsFragment extends Fragment {
         });
         if (movieDetails.hasTrailers()) {
             setTrailers(movieDetails.getTrailers());
+            shareTrailerItem.setVisible(true);
         }
         if (movieDetails.hasReviews()) {
             setReviews(movieDetails.getReviews());
@@ -238,6 +249,27 @@ public class MovieDetailsFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(KEY_STATE_MOVIE, movieDetails);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_details_movie, menu);
+        shareTrailerItem = menu.findItem(R.id.action_share_trailer);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        shareTrailerItem.setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share_trailer:
+                YoutubeUtil.shareVideo(getActivity(), movieDetails.getTrailers().get(0).getKey());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {

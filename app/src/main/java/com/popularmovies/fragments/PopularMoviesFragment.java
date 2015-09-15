@@ -66,10 +66,10 @@ public class PopularMoviesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_popular_movies, container, false);
         posterAdapter = new PosterAdapter(getActivity(), new ArrayList<Movie>());
-        GridView movie = (GridView)rootView.findViewById(R.id.grid_popular_movies);
+        GridView listPopularMovies = (GridView)rootView.findViewById(R.id.grid_popular_movies);
         progressBarMovies = (ProgressBar)rootView.findViewById(R.id.progress_bar_movies);
-        movie.setAdapter(posterAdapter);
-        movie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listPopularMovies.setAdapter(posterAdapter);
+        listPopularMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mCallbacks.onItemSelected(posterAdapter.getItem(position).getId());
