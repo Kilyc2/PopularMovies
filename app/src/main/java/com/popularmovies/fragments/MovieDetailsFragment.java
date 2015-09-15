@@ -131,7 +131,7 @@ public class MovieDetailsFragment extends Fragment {
         }
     }
 
-    private void setTrailers(ArrayList<MovieTrailer> movieTrailers) {
+    private void setTrailers(ArrayList<MovieTrailer> movieTrailers) throws NullPointerException {
         LinearLayout blockTrailers = (LinearLayout)movieView.findViewById(R.id.movie_trailers);
         blockTrailers.setVisibility(View.VISIBLE);
         LinearLayout trailers = (LinearLayout)blockTrailers.findViewById(R.id.trailer_list);
@@ -152,7 +152,7 @@ public class MovieDetailsFragment extends Fragment {
         }
     }
 
-    private void setReviews(ArrayList<MovieReview> movieReviews) {
+    private void setReviews(ArrayList<MovieReview> movieReviews) throws NullPointerException {
         LinearLayout blockReviews = (LinearLayout)movieView.findViewById(R.id.movie_reviews);
         blockReviews.setVisibility(View.VISIBLE);
         LinearLayout reviews = (LinearLayout)blockReviews.findViewById(R.id.review_list);
