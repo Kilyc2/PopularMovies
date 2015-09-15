@@ -73,11 +73,15 @@ public class MovieDetailsFragment extends Fragment {
             }
         } else {
             movieDetails = savedInstanceState.getParcelable(KEY_STATE_MOVIE);
-            setMovieView();
+            try {
+                setMovieView();
+            } catch (NullPointerException npe) {
+                //NOTHING
+            }
         }
     }
 
-    private void setMovieView() {
+    private void setMovieView() throws NullPointerException {
         TextView title = (TextView)movieView.findViewById(R.id.title_movie_detail);
         title.setText(movieDetails.getTitle());
         ImageView poster = (ImageView)movieView.findViewById(R.id.poster_movie_detail);
@@ -119,7 +123,8 @@ public class MovieDetailsFragment extends Fragment {
         });
         if (movieDetails.hasTrailers()) {
             setTrailers(movieDetails.getTrailers());
-            shareTrailerItem.setVisible(true);
+            if (shareTrailerItem != null)
+                shareTrailerItem.setVisible(true);
         }
         if (movieDetails.hasReviews()) {
             setReviews(movieDetails.getReviews());
@@ -155,7 +160,7 @@ public class MovieDetailsFragment extends Fragment {
             LinearLayout reviewItem = (LinearLayout)LayoutInflater.from(getActivity())
                     .inflate(R.layout.review_item, reviews, false);
             TextView reviewAuthor = (TextView)reviewItem.findViewById(R.id.review_author);
-            reviewAuthor.setText("A movie review by " + review.getAuthor());
+            reviewAuthor.setText(getString(R.string.head_review) + review.getAuthor());
             TextView reviewText = (TextView)reviewItem.findViewById(R.id.review_text);
             reviewText.setText(review.getReview());
             reviewText.setTag(review.getId());
@@ -169,8 +174,8 @@ public class MovieDetailsFragment extends Fragment {
             reviewAuthor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    TextView reviewAuthor = (TextView)view;
-                    TextView reviewText = (TextView)reviewAuthor.getTag();
+                    TextView reviewAuthor = (TextView) view;
+                    TextView reviewText = (TextView) reviewAuthor.getTag();
                     if (reviewText.getVisibility() == View.VISIBLE) {
                         setTextViewReviewInvisible(reviewAuthor, reviewText);
                     } else {
@@ -259,7 +264,8 @@ public class MovieDetailsFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        shareTrailerItem.setVisible(false);
+        if (movieDetails == null || !movieDetails.hasTrailers())
+            shareTrailerItem.setVisible(false);
     }
 
     @Override
